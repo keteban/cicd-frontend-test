@@ -15,17 +15,14 @@ jobs:
 
     - name: Deploy staging
       if: github.ref == 'refs/heads/develop'
-      uses: appleboy/scp-action@master
-      env:
-        HOST: ${{ secrets.HOST }}
-        USERNAME: ${{ secrets.USERNAME }}
-        PORT: ${{ secrets.PORT }}
-        KEY: ${{ secrets.SSHKEY }}
+      uses: appleboy/ssh-action@master
       with:
         source: "."
         target: "/home/ksp-react"
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSHKEY }}
+        port: ${{ secrets.PORT }}
         script: |
-          npm install
-          npm run build
-          rm -rfv /var/www/html
-          mv /home/ksp-react /var/www/html
+          whoami
+          ls -al
