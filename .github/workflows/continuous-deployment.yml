@@ -1,0 +1,27 @@
+name: Continuous Deployment
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: debian:10
+
+    steps:
+    - uses: actions/checkout@v1
+
+    - name: Copy repository contents via scp
+      uses: appleboy/scp-action@develop
+      env:
+        HOST: ${{ secrets.HOST }}
+        USERNAME: ${{ secrets.USERNAME }}
+        PORT: ${{ secrets.PORT }}
+        KEY: ${{ secrets.SSHKEY }}
+      with:
+        source: "."
+        target: "/home/ksp-react"
+        script: |
+          npm install
+          npm run build
+          rm -rfv /var/www/html
+          mv /home/ksp-react /var/www/html
