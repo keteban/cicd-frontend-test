@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - name: Checkout Repository
+      uses: actions/checkout@v1
 
     - name: Copy repository contents via scp
       if: github.ref == 'refs/heads/develop'
@@ -23,9 +24,9 @@ jobs:
         KEY: ${{ secrets.KEY }}
       with:
         source: "."
-        target: "/var/www/html"
+        target: "/home/ksp-frontend-test"
 
-    - name: Executing remote command
+    - name: Deployment
       if: github.ref == 'refs/heads/develop'
       uses: appleboy/ssh-action@master
       with:
@@ -34,5 +35,7 @@ jobs:
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.KEY }}
         script: |
-          whoami
-          ls -al
+          cd /home/ksp-frontend-test 
+          npm install
+          npm run build
+          cp -r /home/ksp-frontend-test/build/. /var/www/html
