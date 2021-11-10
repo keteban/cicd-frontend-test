@@ -48,5 +48,5 @@ jobs:
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.KEY }}
         with:
-          source: "react-github-actions-build/*"
+          source: "react-github-actions-build/react-github-actions-build/*"
           target: "/var/www/html"
